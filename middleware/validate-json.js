@@ -1,5 +1,7 @@
-function validateDto(ajvValidate) {
-    return (req, res, next) => {
+function validateJson(ajvValidate) {
+    return (req, res) => {
+        console.log(req.body)
+
         const valid = ajvValidate(req.body);
         if (!valid) {
             // it is imperative that the reference to the errors is copied
@@ -13,10 +15,11 @@ function validateDto(ajvValidate) {
             // res.status(400).json(...)
             // but in general copying the errors reference is crucial
             const errors = ajvValidate.errors;
-            res.status(400).json(errors);
+            console.log(errors);
+            res.send(400, errors);
         }
-        next();
+        res.status(200)
     };
 }
 
-module.exports = validateDto;
+module.exports = validateJson;

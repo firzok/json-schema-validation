@@ -1,9 +1,11 @@
 const express = require('express');
-const userController = require('../controller/user-controller');
-const validateDto = require('../middleware/validate-dto');
+const validateJson = require('../middleware/validate-json');
 const userSchema = require('../schema/user');
 
 const router = express.Router();
-router.post('/register', validateDto(userSchema), userController.register);
+
+router.use(express.static("public"))
+
+router.post('/register', validateJson(userSchema));
 
 module.exports = router;

@@ -1,0 +1,67 @@
+* {
+    box-sizing: border-box;
+}
+
+
+/* Style the body */
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    margin: 0;
+}
+
+
+/* Header/logo Title */
+
+.header {
+    padding: 80px;
+    text-align: center;
+    background: #019ce0;
+    color: white;
+}
+
+
+/* Increase the font size of the heading */
+
+.header h1 {
+    font-size: 40px;
+}
+
+
+/* Column container */
+
+.row {
+    display: -ms-flexbox;
+    /* IE10 */
+    display: flex;
+    -ms-flex-wrap: wrap;
+    /* IE10 */
+    flex-wrap: wrap;
+    padding-top: 50px;
+    justify-content: center;
+}
+
+.hidden {
+    visibility: hidden;
+}
+
+.result-good {
+    color: green;
+}
+
+.result-bad {
+    color: red;
+}
+
+label {
+    font-size: 20px;
+}
+
+button {
+    margin: 10px;
+    padding: 10px;
+}
+
+.error {
+    border: 5px solid red;
+}
