@@ -1,5 +1,5 @@
 const button = document.getElementById('submit-btn');
-const json = document.getElementById('json');
+const editorElement = document.getElementById('editor');
 const result = document.getElementById('result');
 
 const status = {
@@ -7,13 +7,22 @@ const status = {
     invalid: 'invalid',
 }
 
+let editor = ace.edit("editor", {
+    theme: "ace/theme/one_dark",
+    mode: "ace/mode/json",
+    wrap: true,
+    printMargin: false,
+    maxLines: 30,
+    minLines: 20
+});
+
 button.addEventListener('click', () => {
-    json.value = json.value.replaceAll('\'', '\"').trim();
+    editor.setValue(editor.getValue().replaceAll('\'', '\"').trim())
 
     try {
-        JSON.parse(json.value)
+        JSON.parse(editor.getValue())
     } catch (error) {
-        json.classList.add('error')
+        editorElement.classList.add('error')
         result.classList.add('result-bad')
         result.innerHTML = 'Invalid JSON'
         return
@@ -24,7 +33,7 @@ button.addEventListener('click', () => {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: json.value
+            body: editor.getValue()
         })
         .then(response => {
             if (response.status === 200) {
@@ -34,17 +43,17 @@ button.addEventListener('click', () => {
         .then(responseJSON => {
 
             if (responseJSON.jsonStatus === status.invalid) {
-                json.classList.add('error')
+                editorElement.classList.add('error')
                 result.classList.add('result-bad')
 
                 let messages = ''
-                responseJSON.errors.map(error => {
-                    messages += `${error.instancePath.replace('\/','')}: ${error.message}`
+                responseJSON.errors.map((error, idx) => {
+                    messages += `${idx+1}- ${error.instancePath.replace('\/','') ? error.instancePath.replace('\/','')+": ":""} ${error.message}`
                     messages += '<br />'
                 })
                 result.innerHTML = messages
             } else if (responseJSON.jsonStatus === status.valid) {
-                json.classList.remove('error')
+                editorElement.classList.remove('error')
                 result.classList.remove('result-bad')
                 result.innerHTML = "No errors found. JSON validates against the schema."
             }
@@ -60,16 +69,29 @@ button.addEventListener('click', () => {
         })
 });
 
-json.addEventListener('input', async _ => {
-    const text = json.value.trim()
+editorElement.addEventListener('input', async _ => {
+    const text = editor.getValue().trim()
     const length = text.length
     if (text[0] !== '{' || text[length - 1] !== '}') {
-        json.classList.add('error')
+        editorElement.classList.add('error')
         result.classList.add('result-bad')
         result.innerHTML = "Invalid JSON"
     } else {
-        json.classList.remove('error')
+        editorElement.classList.remove('error')
         result.classList.remove('result-bad')
         result.innerHTML = ""
     }
 })
+
+editor.commands.addCommand({
+    name: 'submit',
+    bindKey: { win: 'Ctrl-Enter', mac: 'Command-Enter' },
+    exec: function(editor) {
+        let event = new Event('click', {
+            bubbles: true,
+            cancelable: true,
+        });
+
+        button.dispatchEvent(event);
+    }
+});

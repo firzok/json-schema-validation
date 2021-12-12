@@ -16,30 +16,40 @@
         <h1>JSON Schema Validation</h1>
     </div>
 
+    <div class="row">
+        <h3 for="json">Please enter the json here:</h3>
+        </div>
+        <div class="row">
 
+            <div id="editor">{
+        "firstName":"Firzok",
+        "email": "abc@gmail.com",
+        "dob":"1994-11,21",
+        "countryCode":["US"] 
+    }
+        </div>
+        <br>
+    </div>
 
     <div class="row">
-        <label for="json">Please enter the json here:</label>
-        <textarea type="text" id="json" name="json" rows="30" cols="200">
-{
-    
-    
-    
-    
-}</textarea>
-        <br>
-
         <button type="submit" id="submit-btn" value="Submit">
             Submit
         </button>
     </div>
-
     <div class="row">
         <h2 id="result" class="result-good"></h2>
     </div>
 
 
+    <script src="./ace-src-min/ace.js" type="text/javascript" charset="utf-8"></script>
     <script src="/script.js"></script>
+    <!-- <script>
+                                                                                    let editor = ace.edit("editor");
+                                                                                    editor.setTheme("ace/theme/one_dark");
+                                                                                    editor.session.setMode("ace/mode/json");
+                                                                                    editor.session.setUseWrapMode(true);
+                                                                                    editor.setShowPrintMargin(false);
+                                                                                </script> -->
 
 </body>
 

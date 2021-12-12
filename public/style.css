@@ -14,7 +14,7 @@ body {
 /* Header/logo Title */
 
 .header {
-    padding: 80px;
+    padding: 7px;
     text-align: center;
     background: #019ce0;
     color: white;
@@ -37,7 +37,6 @@ body {
     -ms-flex-wrap: wrap;
     /* IE10 */
     flex-wrap: wrap;
-    padding-top: 50px;
     justify-content: center;
 }
 
@@ -63,5 +62,10 @@ button {
 }
 
 .error {
-    border: 5px solid red;
+    border: 3px solid red;
+}
+
+#editor {
+    height: 30vh;
+    width: 75%;
 }
