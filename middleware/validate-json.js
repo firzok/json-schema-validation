@@ -14,14 +14,13 @@ function validateJson(ajvValidate) {
             // res.status(400).json(...)
             // but in general copying the errors reference is crucial
             const errors = ajvValidate.errors;
-            console.log(errors);
             res.status(200).send({
                 jsonStatus: 'invalid',
                 errors
             });
         } else {
             res.status(200).send({
-                jsonStatus: 'valid',
+                jsonStatus: 'valid'
             });
         }
     };

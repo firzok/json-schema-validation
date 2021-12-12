@@ -10,17 +10,15 @@ const status = {
 button.addEventListener('click', () => {
     json.value = json.value.replaceAll('\'', '\"').trim();
 
-
     try {
         JSON.parse(json.value)
     } catch (error) {
         json.classList.add('error')
         result.classList.add('result-bad')
-        result.innerHTML = 'Invalid JSON123'
+        result.innerHTML = 'Invalid JSON'
         return
     }
 
-    console.log('hjere');
     fetch('/register', {
             method: 'post',
             headers: {
@@ -36,9 +34,15 @@ button.addEventListener('click', () => {
         .then(responseJSON => {
 
             if (responseJSON.jsonStatus === status.invalid) {
-                console.log('here')
                 json.classList.add('error')
                 result.classList.add('result-bad')
+
+                let messages = ''
+                responseJSON.errors.map(error => {
+                    messages += `${error.instancePath.replace('\/','')}: ${error.message}`
+                    messages += '<br />'
+                })
+                result.innerHTML = messages
             } else if (responseJSON.jsonStatus === status.valid) {
                 json.classList.remove('error')
                 result.classList.remove('result-bad')
@@ -46,13 +50,7 @@ button.addEventListener('click', () => {
             }
 
 
-            console.log('Completed!', responseJSON);
-            let messages = ''
-            responseJSON.errors.map(error => {
-                messages += error.message
-                messages += '<br />'
-            })
-            result.innerHTML = messages
+
         })
         .catch((error) => {
             console.error(error)
