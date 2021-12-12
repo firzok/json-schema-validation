@@ -1,6 +1,6 @@
 const express = require('express');
 const validateJson = require('../middleware/validate-json');
-const userSchema = require('../schema/user');
+const userSchema = require('../schema/schema');
 
 const router = express.Router();
 

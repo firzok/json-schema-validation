@@ -1,6 +1,5 @@
 function validateJson(ajvValidate) {
     return (req, res) => {
-        console.log(req.body)
 
         const valid = ajvValidate(req.body);
         if (!valid) {
@@ -16,9 +15,15 @@ function validateJson(ajvValidate) {
             // but in general copying the errors reference is crucial
             const errors = ajvValidate.errors;
             console.log(errors);
-            res.send(400, errors);
+            res.status(200).send({
+                jsonStatus: 'invalid',
+                errors
+            });
+        } else {
+            res.status(200).send({
+                jsonStatus: 'valid',
+            });
         }
-        res.status(200)
     };
 }
 

@@ -2,33 +2,63 @@ const button = document.getElementById('submit-btn');
 const json = document.getElementById('json');
 const result = document.getElementById('result');
 
+const status = {
+    valid: 'valid',
+    invalid: 'invalid',
+}
+
 button.addEventListener('click', () => {
+    json.value = json.value.replaceAll('\'', '\"').trim();
+
+
+    try {
+        JSON.parse(json.value)
+    } catch (error) {
+        json.classList.add('error')
+        result.classList.add('result-bad')
+        result.innerHTML = 'Invalid JSON123'
+        return
+    }
+
+    console.log('hjere');
     fetch('/register', {
             method: 'post',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: json.value
-        }).then(response => {
-            if (response.status === 400) {
+        })
+        .then(response => {
+            if (response.status === 200) {
+                return response.json()
+            }
+        })
+        .then(responseJSON => {
+
+            if (responseJSON.jsonStatus === status.invalid) {
                 console.log('here')
                 json.classList.add('error')
                 result.classList.add('result-bad')
-            } else if (response.status === 200) {
+            } else if (responseJSON.jsonStatus === status.valid) {
                 json.classList.remove('error')
                 result.classList.remove('result-bad')
-                result.innerHTML = "No errors found. JSON validates against the schema"
+                result.innerHTML = "No errors found. JSON validates against the schema."
             }
-            return response.json()
-        })
-        .then(responseJSON => {
+
+
             console.log('Completed!', responseJSON);
             let messages = ''
-            responseJSON.map(error => {
+            responseJSON.errors.map(error => {
                 messages += error.message
                 messages += '<br />'
             })
             result.innerHTML = messages
+        })
+        .catch((error) => {
+            console.error(error)
+            result.classList.add('result-bad')
+            result.innerHTML = "Unable to handle call. Please check console for error."
+
         })
 });
 
