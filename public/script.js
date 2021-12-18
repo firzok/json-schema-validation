@@ -1,97 +1,172 @@
-const button = document.getElementById('submit-btn');
-const editorElement = document.getElementById('editor');
-const result = document.getElementById('result');
-
-const status = {
-    valid: 'valid',
-    invalid: 'invalid',
+const schema = {
+    "title": "Employee",
+    "description": "Object containing employee details",
+    "type": "object",
+    "properties": {
+        "firstName": {
+            "title": "First Name",
+            "description": "The given name.",
+            "examples": [
+                "John"
+            ],
+            "type": "string"
+        },
+        "lastName": {
+            "title": "Last Name",
+            "description": "The family name.",
+            "examples": [
+                "Smith"
+            ],
+            "type": "string"
+        },
+        "gender": {
+            "title": "Gender",
+            "enum": ["male", "female"]
+        },
+        "availableToHire": {
+            "type": "boolean",
+            "default": false
+        },
+        "age": {
+            "description": "Age in years",
+            "type": "integer",
+            "minimum": 0,
+            "examples": [28, 32]
+        },
+        "job": {
+            "$ref": "job"
+        }
+    },
+    "required": ["firstName", "lastName"]
 }
 
-let editor = ace.edit("editor", {
-    theme: "ace/theme/one_dark",
-    mode: "ace/mode/json",
-    wrap: true,
-    printMargin: false,
-    maxLines: 30,
-    minLines: 20
-});
-
-button.addEventListener('click', () => {
-    editor.setValue(editor.getValue().replaceAll('\'', '\"').trim())
-
-    try {
-        JSON.parse(editor.getValue())
-    } catch (error) {
-        editorElement.classList.add('error')
-        result.classList.add('result-bad')
-        result.innerHTML = 'Invalid JSON'
-        return
+const job = {
+    "title": "Job description",
+    "type": "object",
+    "required": ["address"],
+    "properties": {
+        "company": {
+            "type": "string",
+            "examples": [
+                "ACME",
+                "Dexter Industries"
+            ]
+        },
+        "role": {
+            "description": "Job title.",
+            "type": "string",
+            "examples": [
+                "Human Resources Coordinator",
+                "Software Developer"
+            ],
+            "default": "Software Developer"
+        },
+        "address": {
+            "type": "string"
+        },
+        "salary": {
+            "type": "number",
+            "minimum": 100,
+            "examples": [100, 110, 120]
+        }
     }
+}
 
-    fetch('/register', {
-            method: 'post',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: editor.getValue()
-        })
-        .then(response => {
-            if (response.status === 200) {
-                return response.json()
-            }
-        })
-        .then(responseJSON => {
+// const schema = {
+//     type: 'object',
+//     properties: {
+//         firstName: { type: 'string', minLength: 3 },
+//         email: { type: 'string', format: 'email' },
+//         dob: { type: 'string', format: 'date' },
+//         countryCode: {
+//             type: 'string',
+//             enum: ['US', 'CA'],
+//         },
+//     },
+//     required: ['firstName', 'email', 'dob', 'countryCode'],
+// };
 
-            if (responseJSON.jsonStatus === status.invalid) {
-                editorElement.classList.add('error')
-                result.classList.add('result-bad')
+// const schema = {
 
-                let messages = ''
-                responseJSON.errors.map((error, idx) => {
-                    messages += `${idx+1}- ${error.instancePath.replace('\/','') ? error.instancePath.replace('\/','')+": ":""} ${error.message}`
-                    messages += '<br />'
-                })
-                result.innerHTML = messages
-            } else if (responseJSON.jsonStatus === status.valid) {
-                editorElement.classList.remove('error')
-                result.classList.remove('result-bad')
-                result.innerHTML = "No errors found. JSON validates against the schema."
-            }
+//     title: "Person",
+//     type: "object",
+//     properties: {
+//         firstName: {
+//             type: "string",
+//             description: "The person's first name."
+//         },
+//         lastName: {
+//             type: "string",
+//             description: "The person's last name."
+//         },
+//         age: {
+//             description: "Age in years which must be equal to or greater than zero.",
+//             type: "integer",
+//             minimum: 0
+//         }
+//     },
+
+//     required: ['firstName', 'email', 'dob', 'countryCode'],
+// };
+
+// const schema = {
+
+//     description: "A representation of a person, company, organization, or place",
+//     type: "object",
+//     properties: {
+//         fruits: {
+//             type: "array",
+//             items: {
+//                 "type": "string"
+//             }
+//         },
+//         vegetables: {
+//             type: "array",
+//             items: { "$ref": "#/$defs/veggie" }
+//         }
+//     },
+//     $defs: {
+//         veggie: {
+//             type: "object",
+//             required: ["veggieName", "veggieLike"],
+//             properties: {
+//                 veggieName: {
+//                     type: "string",
+//                     description: "The name of the vegetable."
+//                 },
+//                 veggieLike: {
+//                     type: "boolean",
+//                     description: "Do I like this vegetable?"
+//                 }
+//             }
+//         }
+//     }
+// };
 
 
-
-        })
-        .catch((error) => {
-            console.error(error)
-            result.classList.add('result-bad')
-            result.innerHTML = "Unable to handle call. Please check console for error."
-
-        })
-});
-
-editorElement.addEventListener('input', async _ => {
-    const text = editor.getValue().trim()
-    const length = text.length
-    if (text[0] !== '{' || text[length - 1] !== '}') {
-        editorElement.classList.add('error')
-        result.classList.add('result-bad')
-        result.innerHTML = "Invalid JSON"
-    } else {
-        editorElement.classList.remove('error')
-        result.classList.remove('result-bad')
-        result.innerHTML = ""
+const json = {
+    "firstName": "Firzok",
+    "lastName": "Nadeem",
+    "gender": "male",
+    "age": "27",
+    "availableToHire": true,
+    "job": {
+        "company": "SAP",
+        "role": "developer",
+        "salary": 90,
+        "address": "123 abc street"
     }
-})
+}
 
-editor.commands.addCommand({
-    name: 'submit',
-    bindKey: { win: 'Ctrl-Enter', mac: 'Command-Enter' },
-    exec: function(editor) {
-        let event = new Event('click', {
-            bubbles: true,
-            cancelable: true,
-        });
+const options = {
+    schema: schema,
+    schemaRefs: {
+        "job": job
+    },
+    mode: 'code',
+    modes: ['code', 'text', 'tree', 'preview']
+}
 
-        button.dispatchEvent(event);
-    }
-});
+// create the editor
+const container = document.getElementById('jsoneditor')
+const editor = new JSONEditor(container, options, json)

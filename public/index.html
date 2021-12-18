@@ -1,49 +1,50 @@
-<!DOCTYPE html>
+<!DOCTYPE HTML>
 <html lang="en">
 
 <head>
-    <title>JSON Schema Validation</title>
-    <link rel="stylesheet" href="/style.css">
+    <meta charset="utf-8">
 
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>JSONEditor | JSON schema validation</title>
 
+    <link href="./jsoneditor.css" rel="stylesheet" type="text/css">
+    <link href="./style.css" rel="stylesheet" type="text/css">
+    <script src="./jsoneditor.min.js"></script>
+    </script>
+    <style type="text/css">
+        body {
+            width: 100%;
+            font: 11pt sans-serif;
+        }
+        
+        #jsoneditor {
+            /* margin: 1rem; */
+            width: 90%;
+            height: 50rem;
+        }
+        /* custom bold styling for non-default JSON schema values */
+        
+        .jsoneditor-is-not-default {
+            font-weight: bold;
+        }
+    </style>
 </head>
 
 <body>
-
     <div class="header">
         <h1>JSON Schema Validation</h1>
     </div>
 
     <div class="row">
         <h3 for="json">Please enter the json here:</h3>
-        </div>
-        <div class="row">
-
-            <div id="editor">{
-        "firstName":"Firzok",
-        "email": "abc@gmail.com",
-        "dob":"1994-11,21",
-        "countryCode":["US"] 
-    }
-        </div>
-        <br>
-    </div>
-
-    <div class="row">
-        <button type="submit" id="submit-btn" value="Submit">
-            Submit
-        </button>
     </div>
     <div class="row">
-        <h2 id="result" class="result-good"></h2>
+
+        <div id="jsoneditor"></div>
     </div>
 
 
-    <script src="./ace-src-min/ace.js" type="text/javascript" charset="utf-8"></script>
-    <script src="/script.js"></script>
-
+    <div id="jsoneditor"></div>
+    <script src="./script.js"></script>
 
 </body>
 
