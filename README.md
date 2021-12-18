@@ -4,7 +4,7 @@ This is a technical coding challenge I did for my student job application at SAP
 
 
 ## Demo
-[Hosted on Heroku](https://json-schema-validation.herokuapp.com/)
+[Hosted on Heroku](https://json-schema-validation-2.herokuapp.com/)
 
 
 ___
